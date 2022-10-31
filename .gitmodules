@@ -1,0 +1,3 @@
+[submodule "hw1/hw1/part2/App/flask-db-demo"]
+	path = hw1/hw1/part2/App/flask-db-demo
+	url = https://github.com/uwi-info3180/flask-db-demo
