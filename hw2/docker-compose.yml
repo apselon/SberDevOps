@@ -1,0 +1,41 @@
+version: '3.7'
+services:
+  deployer-server:
+    build:
+      context: Deployer
+      dockerfile: Dockerfile
+
+    networks:
+      servers-net:
+        ipv4_address: 172.20.127.0
+
+    depends_on:
+      - first-remote
+      - second-remote
+
+  first-remote:
+    tty: true
+    build:
+      context: RemoteHost
+      dockerfile: Dockerfile
+
+    networks:
+      servers-net:
+        ipv4_address: 172.20.127.2
+
+
+  second-remote:
+    tty: true
+    build:
+      context: RemoteHost
+      dockerfile: Dockerfile
+
+    networks:
+      servers-net:
+        ipv4_address: 172.20.127.1
+
+networks:
+  servers-net:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

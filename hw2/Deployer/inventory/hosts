@@ -1,0 +1,8 @@
+[all:vars]
+ansible_connection=ssh
+ansible_user=root
+ansible_ssh_pass=1234
+
+[remotes]
+172.20.127.1
+172.20.127.2

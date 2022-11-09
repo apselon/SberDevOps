@@ -1,0 +1,11 @@
+---
+
+- name: Collect app files
+  copy:
+    src: App
+    dst: /App
+
+- name: Deploy Docker Compose
+  community.docker.docker_compose:
+    project_src: /App
+    files: docker-compose.yml

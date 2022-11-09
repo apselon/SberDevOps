@@ -1,0 +1,30 @@
+version: '3.7'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    networks:
+      - ai-net
+    depends_on:
+      - postgres
+    ports:
+      - '8080:8080'
+
+  postgres:
+    image: postgres:latest
+    container_name: db-service
+    hostname: aidb
+    networks:
+      - ai-net
+    ports:
+      - '5432:5432'
+    env_file:
+      - ./PostgresData/dbdescr.env
+    volumes:
+      - ./PostgresData/data:/var/lib/postgresql/data
+
+networks:
+      ai-net:
+          driver: bridge

@@ -1,0 +1,6 @@
+---
+
+- name: Deploy App
+  hosts: remotes
+  roles:
+    - roles/BuildDockerImages
