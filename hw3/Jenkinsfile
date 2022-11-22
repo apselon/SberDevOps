@@ -39,5 +39,13 @@ pipeline {
                 }
             }
         }
+
+        stage('Check coverage') {
+            steps {
+                withSonarQubeEnv(credentialsId: 'Ukraine', installationName: 'SonarQube') {
+                    sh 'echo kek'
+                }
+            }
+        }
     }
 }
