@@ -43,8 +43,9 @@ pipeline {
         stage('Check coverage') {
             agent any
             steps {
+                def scannerHome = tool 'SonarQubeScanner3'
                 withSonarQubeEnv(credentialsId: 'Ukraine', installationName: 'Perdoka') {
-                    sh "ls /bin"
+                    sh "${scannerHome}/bin/sonar-scanner"
                 }
             }
         }
