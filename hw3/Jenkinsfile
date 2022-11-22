@@ -41,6 +41,7 @@ pipeline {
         }
 
         stage('Check coverage') {
+            agent any
             steps {
                 withSonarQubeEnv(credentialsId: 'Ukraine', installationName: 'SonarQube') {
                     sh 'echo kek'
