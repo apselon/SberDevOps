@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   jenkins-test-server:
-    image: jenkins/jenkins:lts
+    build: TestServer 
     privileged: true
 
     ports:
@@ -33,6 +33,8 @@ services:
       - ./sonar/sonarqube_data:/opt/sonarqube/data
       - ./sonar/sonarqube_extensions:/opt/sonarqube/extensions
       - ./sonar/sonarqube_logs:/opt/sonarqube/logs
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
     ports:
       - "9000:9000"
 

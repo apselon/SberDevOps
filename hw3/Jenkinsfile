@@ -48,10 +48,7 @@ pipeline {
         }
 
         stage('Run') {
-            agent any
-            steps {
-                sh "docker build hw3/App"
-            }
+            sh "docker build hw3/App"
         }
     }
 }
