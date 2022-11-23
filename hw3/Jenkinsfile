@@ -45,9 +45,9 @@ pipeline {
             steps {
                 script {
                     def scannerHome = tool 'FirstScanner'
-                }
-                withSonarQubeEnv(credentialsId: 'Ukraine', installationName: 'Perdoka') {
-                    sh "${scannerHome}/bin/sonar-scanner"
+                    withSonarQubeEnv(credentialsId: 'Ukraine', installationName: 'Perdoka') {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
                 }
             }
         }
