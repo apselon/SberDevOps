@@ -11,28 +11,25 @@ pipeline {
                 sh 'pwd'
                 sh 'ls'
                 sh 'python3 -m py_compile hw3/App/sources/add2vals.py hw3/App/sources/calc.py'
+
                 //This stash step saves the Python source code and compiled byte code files from the sources
                 //workspace directory for use in later stages.
                 stash(name: 'compiled-results', includes: 'hw3/App/sources/*.py*')
             }
         }
+
         stage('Test') {
             agent any
             steps {
                 //This sh step executes pytest’s py.test command on sources/test_calc.py, which runs a set of
                 //unit tests (defined in test_calc.py) on the "calc" library’s add2 function.
-                //The --junit-xml test-reports/results.xml option makes py.test generate a JUnit XML report,
-                //which is saved to test-reports/results.xml
-                sh 'py.test-3 --verbose --alluredir test-reports hw3/App/sources/test_calc.py'
+                sh 'py.test-3 --cov-report xml:hw3/App/coverage.xml --cov=hw3/App --verbose --alluredir test-reports hw3/App/sources/test_calc.py'
             }
 
             post {
                 always {
                     script {
                          allure([
-                            //includeProperties: false,
-                            //properties: [],
-                            //reportBuildPolicy: 'ALWAYS',
                             results: [[path: 'test-reports']]
                          ])
                     }
@@ -46,8 +43,6 @@ pipeline {
                 script {
                     def scannerHome = tool 'FirstScanner'
                     withSonarQubeEnv(credentialsId: 'Ukraine', installationName: 'Perdoka') {
-                        sh "ls"
-                        sh "pwd"
                         sh "${scannerHome}/bin/sonar-scanner -D sonar.projectBaseDir=hw3/App"
                     }
                 }
