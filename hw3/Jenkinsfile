@@ -46,7 +46,9 @@ pipeline {
                 script {
                     def scannerHome = tool 'FirstScanner'
                     withSonarQubeEnv(credentialsId: 'Ukraine', installationName: 'Perdoka') {
-                        sh "${scannerHome}/bin/sonar-scanner"
+                        sh "ls"
+                        sh "pwd"
+                        sh "${scannerHome}/bin/sonar-scanner -D sonar.projectBaseDir=hw3/App"
                     }
                 }
             }
