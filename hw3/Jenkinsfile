@@ -48,5 +48,13 @@ pipeline {
                 }
             }
         }
+
+        stage('Run') {
+            agent any
+            steps {
+                sh "cd hw3/App"
+                sh "docker build ."
+            }
+        }
     }
 }
