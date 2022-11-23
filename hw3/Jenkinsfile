@@ -50,10 +50,7 @@ pipeline {
         stage('Run') {
             agent any
             steps {
-                sh "cd hw3/App"
-                sh "pwd"
-                sh "ls"
-                sh "docker build ."
+                sh "docker build hw3/App"
             }
         }
     }
