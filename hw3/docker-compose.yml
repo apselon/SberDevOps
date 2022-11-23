@@ -23,6 +23,8 @@ services:
     image: sonarqube:community
     depends_on:
       - sonar-db
+      - jenkins-test-server
+
     environment:
       SONAR_JDBC_URL: jdbc:postgresql://sonar-db:5432/sonar
       SONAR_JDBC_USERNAME: sonar
@@ -35,8 +37,28 @@ services:
       - "9000:9000"
 
     networks:
-      - jenkins-net
-  
+      jenkins-net:
+        ipv4_address: 172.20.127.1
+
+#  sonar-scanner:
+#    image: sonarsource/sonar-scanner-cli
+#    depends_on:
+#      - sonarqube
+#
+#    environment:
+#      SONAR_HOST_URL: "http://172.20.127.1:9000"
+#
+#    volumes:
+#      - ./App:/Project
+#
+#    networks:
+#      - jenkins-net
+#
+#    volumes:
+#      - ./sonar/sonar-scanner/conf:/opt/sonar-scanner/conf
+#
+#    command: ["sleep", "1m"]
+
   sonar-db:
     image: postgres:12
     environment:

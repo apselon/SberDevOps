@@ -43,8 +43,12 @@ pipeline {
         stage('Check coverage') {
             agent any
             steps {
+                script {
+                    def scannerHome = tool 'FirstScanner'
+                }
                 withSonarQubeEnv(credentialsId: 'Ukraine', installationName: 'Perdoka') {
-                    sh "docker run --rm --net=host -v ${PWD}:/hw3 sonarsource/sonar-scanner-cli sonar-scanner -D sonar.projectBaseDir=/hw3/App"
+                    //sh "docker run --rm --net=host -v ${PWD}:/hw3 sonarsource/sonar-scanner-cli sonar-scanner -D sonar.projectBaseDir=/hw3/App"
+                    sh "echo kek"
                 }
             }
         }
