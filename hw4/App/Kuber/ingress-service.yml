@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: server-ingress-service
+spec:
+  rules:
+  - host: adam4ik.state.gov
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service: 
+            name: server
+            port:
+              number: 8080
