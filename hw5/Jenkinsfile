@@ -1,0 +1,69 @@
+def TESTS_OK
+def COVERAGE_OK
+
+pipeline {
+    agent none
+    stages {
+        stage('Build') {
+            agent any
+            steps {
+                sh 'python3 -m py_compile hw3/App/sources/calc.py'
+
+                //This stash step saves the Python source code and compiled byte code files from the sources
+                //workspace directory for use in later stages.
+                stash(name: 'compiled-results', includes: 'hw3/App/sources/*.py*')
+            }
+        }
+
+        stage('Deploy to DEV') {
+            agent any
+            script {
+                sh "docker build hw3/App -f DEV_Dockerfile"
+            }
+        }
+
+        stage('Test') {
+            agent any
+            steps {
+                //This sh step executes pytest’s py.test command on sources/test_calc.py, which runs a set of
+                //unit tests (defined in test_calc.py) on the "calc" library’s add2 function.
+                TESTS_OK = sh ( script: 'py.test-3 --cov-report xml:hw3/App/coverage.xml --cov=hw3/App --verbose --alluredir test-reports hw3/App/sources/test_calc.py', returnStatus: true ) == 0
+            }
+
+            post {
+                always {
+                    script {
+                         allure([
+                            results: [[path: 'test-reports']]
+                         ])
+                    }
+                }
+            }
+        }
+
+        stage('Check coverage') {
+            agent any
+            steps {
+                script {
+                    def scannerHome = tool 'FirstScanner'
+                    withSonarQubeEnv(credentialsId: 'MyCrId', installationName: 'SonnarChecker') {
+                        COVERAGE_OK = sh ( script: "${scannerHome}/bin/sonar-scanner -D sonar.projectBaseDir=hw3/App", returnStatus: true ) == 0
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to PROD') {
+            agent any
+            script {
+                if ( TEST_OK ) {
+                    sh "docker build hw3/App -f PROD_Dockerfile"
+                }
+
+                else {
+                    return "TESTS FAILED!"
+                }                     
+            }
+        }
+    }
+}
