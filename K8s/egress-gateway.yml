@@ -1,0 +1,30 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: pokeapi
+spec:
+  hosts:
+    - pokeapi.co
+  ports:
+    - number: 443
+      name: tls
+      protocol: TLS
+  resolution: DNS
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: pokeapi-egressgateway
+spec:
+  selector:
+    app: istio-egressgateway
+  servers:
+    - port:
+        number: 443
+        name: tls
+        protocol: TLS
+      hosts:
+        - pokeapi.co
+      tls:
+        mode: PASSTHROUGH
